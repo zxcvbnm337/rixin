@@ -1,9 +1,6 @@
 # ---- 本地会话数据（agent 记忆、测试中间产物、调试日志）----
 .workbuddy/
 
-# ---- 微信开发者工具本机私有配置（含个人 appid / 编译设置，每台机器不同）----
-miniprogram/project.private.config.json
-
 # ---- 依赖 ----
 node_modules/
 npm-debug.log*

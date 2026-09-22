@@ -23,7 +23,7 @@
       var box = el('sidebar');
       if (!box) return;
       var cur = router.current ? router.current.page : 'home';
-      var html = '<div class="sb-brand"><span class="sb-dot"></span><span class="sb-name">我的工作台</span></div>';
+      var html = '<div class="sb-brand"><span class="sb-dot"></span><span class="sb-name">日新 · Rixin</span></div>';
       NAV.forEach(function (group) {
         html += '<nav class="sb-group">';
         group.forEach(function (it) {
