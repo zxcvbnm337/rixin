@@ -1,0 +1,89 @@
+<view class="page-wrap">
+
+  <!-- 今日概览：一眼看到今天投入了多少 -->
+  <view class="hero">
+    <view class="hero-date">{{dateCN}}</view>
+    <view class="hero-dur">{{todayText}}</view>
+    <view class="hero-sub">
+      今天 {{todayCount}} 条记录 · 连续记录 {{streak}} 天
+    </view>
+  </view>
+
+  <!-- 断档提醒：只在真的断了两天以上才出现 -->
+  <view class="nudge" wx:if="{{nudge}}">{{nudge}}</view>
+
+  <!-- 录入卡：一句话 + 一个分类 + 一个时长 -->
+  <view class="card">
+    <input
+      class="ipt"
+      placeholder="刚才做了什么？例如：看完 LangChain 文档"
+      placeholder-class="ipt-ph"
+      value="{{form.title}}"
+      maxlength="60"
+      confirm-type="done"
+      data-field="title"
+      bindinput="onInput"
+      bindconfirm="onAdd"
+    />
+
+    <view class="field-label">属于</view>
+    <view class="chips">
+      <view
+        class="chip {{form.kind === item.id ? 'on' : ''}}"
+        wx:for="{{kinds}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="pickKind"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="field-label">花了多久</view>
+    <view class="chips">
+      <view
+        class="chip {{form.minutes === item ? 'on' : ''}}"
+        wx:for="{{quickMinutes}}"
+        wx:key="*this"
+        data-min="{{item}}"
+        bindtap="pickMinutes"
+      >{{item}}分</view>
+      <input
+        class="chip-ipt"
+        type="digit"
+        placeholder="自定义"
+        placeholder-class="ipt-ph"
+        value="{{customMin}}"
+        bindinput="onCustomMin"
+      />
+    </view>
+
+    <button class="btn add" bindtap="onAdd">记下来</button>
+  </view>
+
+  <!-- 今日清单 -->
+  <view class="card">
+    <view class="card-title">今天的记录</view>
+
+    <view class="empty" wx:if="{{list.length === 0}}">
+      <view class="empty-t">今天还是空的</view>
+      <view class="hint">写下一句话、点一个时长就够了。不用分类得很准，先把动作做出来。</view>
+    </view>
+
+    <view wx:else>
+      <view class="rec" wx:for="{{list}}" wx:key="id">
+        <view class="dot" style="background: {{item.kindColor}}"></view>
+        <view class="grow">
+          <view class="rec-title">{{item.title}}</view>
+          <view class="rec-sub">{{item.kindLabel}} · {{item.timeText}}{{item.fromAI ? ' · AI 解析' : ''}}</view>
+        </view>
+        <view class="rec-dur">{{item.durText}}</view>
+        <view class="rec-del" data-id="{{item.id}}" bindtap="onDelete">删</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="foot">
+    <view class="foot-link" bindtap="goReview">看本周复盘 →</view>
+    <view class="foot-link" bindtap="goLedger">看时间账本 →</view>
+  </view>
+
+</view>

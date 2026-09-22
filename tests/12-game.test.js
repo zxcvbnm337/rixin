@@ -297,14 +297,32 @@ test('排行：本周 / 本月口径不同，按分钟倒序', async () => {
   assert.deepStrictEqual(month, [{ label: '本月早前', value: 50 }, { label: '本周多', value: 30 }],
     '本月应按分钟倒序，50 在前');
   assert.strictEqual(g(ctx).totalMinutes('month', ref), 80);
+});
 
-  /* 页面上切换周/月，柱子跟着变 */
+/* 渲染部分单独测：页面默认按「今天所在的周」取数，无法接受固定参照日，
+   所以数据锚定今天来造，保证任何运行日期下结果都一样。
+   口径差异本身由上一个测试在数据层验证，这里只验证「切页签 → 视图跟着变」。 */
+test('排行：切换周 / 月，柱子跟着变', async () => {
+  const ctx = await startGame();
+  const a = g(ctx).addGame({ name: '少的', status: 'playing' });
+  const b = g(ctx).addGame({ name: '多的', status: 'playing' });
+
+  const today = ctx.App.util.today();
+  g(ctx).addLog({ gameId: a.id, minutes: 30, date: today });
+  g(ctx).addLog({ gameId: b.id, minutes: 50, date: today });
+
+  const labels = () => plain(
+    Array.prototype.slice.call(ctx.document.querySelectorAll('.bars .bar-lb')).map(x => x.textContent)
+  );
+
   click(ctx, '[data-act="tab"][data-tab="stats"]');
-  assert.strictEqual(ctx.document.querySelectorAll('.bars .bar-row').length, 1, '默认本周');
+  assert.strictEqual(ctx.document.querySelectorAll('.bars .bar-row').length, 2, '默认本周：两笔都在本周');
+  assert.deepStrictEqual(labels(), ['多的', '少的'], '本周按分钟倒序');
+
   click(ctx, '[data-act="rankKind"][data-kind="month"]');
   assert.strictEqual(ctx.App.pages.game._state.rankKind, 'month');
-  const lbs = Array.prototype.slice.call(ctx.document.querySelectorAll('.bars .bar-lb')).map(x => x.textContent);
-  assert.deepStrictEqual(plain(lbs), ['本月早前', '本周多']);
+  assert.strictEqual(ctx.document.querySelectorAll('.bars .bar-row').length, 2, '本月同样是这两笔');
+  assert.deepStrictEqual(labels(), ['多的', '少的'], '本月按分钟倒序');
 });
 
 test('排行：时长记录的游戏被删掉后不影响统计口径的健壮性', async () => {

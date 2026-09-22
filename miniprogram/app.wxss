@@ -1,0 +1,131 @@
+/* app.wxss —— 全局设计变量与基础样式。
+
+   变量刻意分两层，不要合并：
+     1) 结构型 token（圆角 / 间距）：与主题无关，只声明一次；
+     2) 主题色 token：浅色为默认，深色跟随系统，两套必须成对出现。
+   分开的原因很实际——如果混在一个块里，深色块就得把结构型 token 再抄一遍，
+   抄漏一个（比如 --r-md）在深色下不报错，只会悄悄退回浏览器默认值，极难发现。
+   tests/17-mp-project.test.js 会静态盯着「两套主题色变量是否一一对应」。 */
+
+/* ---------- 结构型 token：与主题无关 ---------- */
+page {
+  --r-sm: 12rpx;
+  --r-md: 20rpx;
+  --r-lg: 28rpx;
+  --sp: 24rpx;
+}
+
+/* ---------- 主题色 token：浅色（THEME_TOKENS_LIGHT） ---------- */
+page {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f5;
+  --text: #1c1c1e;
+  --text-2: #6b7280;
+  --text-3: #9ca3af;
+  --line: #e8eaed;
+  --brand: #1f6feb;
+  --brand-soft: #e8f1fe;
+  --ok: #16a34a;
+  --warn: #d97706;
+  --danger: #dc2626;
+}
+
+/* ---------- 主题色 token：深色（THEME_TOKENS_DARK） ---------- */
+@media (prefers-color-scheme: dark) {
+  page {
+    --bg: #16171a;
+    --surface: #202226;
+    --surface-2: #2a2d31;
+    --text: #eceef1;
+    --text-2: #9aa0a8;
+    --text-3: #6f757d;
+    --line: #32363b;
+    --brand: #5b9bff;
+    --brand-soft: #1e2a3d;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --danger: #f87171;
+  }
+}
+
+/* ---------- 基础样式 ---------- */
+page {
+  background: var(--bg);
+  color: var(--text);
+  font-size: 28rpx;
+  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 自定义 tabBar 固定在底部，页面底部留出安全距离 */
+.page-wrap {
+  padding: var(--sp) var(--sp) 180rpx;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: 25rpx;
+}
+
+.hint {
+  color: var(--text-3);
+  font-size: 24rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 84rpx;
+  padding: 0 36rpx;
+  border-radius: var(--r-md);
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 29rpx;
+  line-height: 1;
+  border: none;
+}
+
+/* 小程序 button 默认带一条 1px 边框（::after），必须显式去掉 */
+.btn::after {
+  border: none;
+}
+
+.btn.ghost {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+}
+
+.divider {
+  height: 1rpx;
+  background: var(--line);
+  margin: 20rpx 0;
+}

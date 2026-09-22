@@ -1,0 +1,87 @@
+<view class="page-wrap">
+
+  <!-- 周切换 -->
+  <view class="week-nav">
+    <view class="wk-btn" data-delta="-1" bindtap="shiftWeek">← 上一周</view>
+    <view class="wk-range">{{rangeText}}</view>
+    <view class="wk-btn {{isThisWeek ? 'off' : ''}}" data-delta="1" bindtap="shiftWeek">下一周 →</view>
+  </view>
+
+  <!-- 结论 -->
+  <view class="card hero-card">
+    <view class="hero-tag">{{generatorLabel}}</view>
+    <view class="hero-text">{{result.headline}}</view>
+    <view class="hero-sug" wx:if="{{result.hasData}}">
+      <view class="sug-lab">建议</view>
+      <view class="sug-text">{{result.suggestion}}</view>
+    </view>
+    <view class="mini-btn" wx:if="{{!result.hasData}}" bindtap="goMe">去记一笔</view>
+  </view>
+
+  <!-- 数字总览 -->
+  <view class="card" wx:if="{{result.hasData}}">
+    <view class="card-title">这一周的数字</view>
+    <view class="sum-row">
+      <view class="sum-cell">
+        <view class="sum-num">{{result.totalText}}</view>
+        <view class="sum-lab">总投入</view>
+      </view>
+      <view class="sum-cell">
+        <view class="sum-num">{{result.dailyAvgText}}</view>
+        <view class="sum-lab">日均</view>
+      </view>
+      <view class="sum-cell">
+        <view class="sum-num">{{result.activeDays}}/{{result.spanDays}}</view>
+        <view class="sum-lab">有记录天数</view>
+      </view>
+      <view class="sum-cell">
+        <view class="sum-num">{{result.records}}</view>
+        <view class="sum-lab">条数</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类分布 -->
+  <view class="card" wx:if="{{result.kinds.length > 0}}">
+    <view class="card-title">时间花在哪</view>
+    <view class="kind" wx:for="{{result.kinds}}" wx:key="id">
+      <view class="kind-head">
+        <view class="dot" style="background: {{item.color}}"></view>
+        <view class="grow kind-lab">{{item.label}}</view>
+        <view class="kind-pct">{{item.pct}}%</view>
+        <view class="kind-dur">{{item.text}}</view>
+      </view>
+      <view class="kind-track">
+        <view class="kind-fill" style="width: {{item.pct}}%; background: {{item.color}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 事实陈述 -->
+  <view class="card" wx:if="{{result.lines.length > 0}}">
+    <view class="card-title">这周发生了什么</view>
+    <view class="line" wx:for="{{result.lines}}" wx:key="*this">
+      <view class="line-dot"></view>
+      <view class="grow">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 环比 -->
+  <view class="card" wx:if="{{result.compare}}">
+    <view class="card-title">对比上一周</view>
+    <view class="cmp-row">
+      <view class="grow">上周 {{result.compare.lastText}}</view>
+      <view class="cmp-delta {{result.compare.up ? 'up' : 'down'}}">{{result.compare.deltaText}}</view>
+    </view>
+  </view>
+
+  <!-- 复制 -->
+  <view class="acts" wx:if="{{result.hasData}}">
+    <button class="btn ghost" bindtap="copyResult">复制复盘文字</button>
+  </view>
+
+  <view class="hint foot-hint">
+    复盘当前由本地规则生成，不需要联网。你可以在「我的」页查看生成方式。
+  </view>
+
+</view>

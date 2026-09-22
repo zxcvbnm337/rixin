@@ -1,0 +1,104 @@
+<view class="page-wrap">
+
+  <!-- 范围切换 -->
+  <view class="seg">
+    <view
+      class="seg-item {{days === item.days ? 'on' : ''}}"
+      wx:for="{{ranges}}"
+      wx:key="days"
+      data-days="{{item.days}}"
+      bindtap="pickRange"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 总量 -->
+  <view class="card">
+    <view class="sum-row">
+      <view class="sum-cell">
+        <view class="sum-num">{{totalText}}</view>
+        <view class="sum-lab">总投入</view>
+      </view>
+      <view class="sum-cell">
+        <view class="sum-num">{{avgText}}</view>
+        <view class="sum-lab">日均</view>
+      </view>
+      <view class="sum-cell">
+        <view class="sum-num">{{recordCount}}</view>
+        <view class="sum-lab">记录条数</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 柱状图 -->
+  <view class="card">
+    <view class="card-title">时间分布</view>
+    <view class="bars" wx:if="{{recordCount > 0}}">
+      <view class="bar-col" wx:for="{{bars}}" wx:key="date">
+        <view class="bar-val">{{item.text}}</view>
+        <view class="bar-track">
+          <view class="bar {{item.today ? 'today' : ''}}" style="height: {{item.h}}rpx"></view>
+        </view>
+        <view class="bar-lab">{{item.label}}</view>
+      </view>
+    </view>
+    <view class="empty" wx:else>
+      <view class="empty-t">这段区间还没有记录</view>
+      <view class="hint">先回「今天」记一笔，图就会长出来。</view>
+      <view class="mini-btn" bindtap="goToday">去记录</view>
+    </view>
+  </view>
+
+  <!-- 分类分布 -->
+  <view class="card" wx:if="{{kinds.length > 0}}">
+    <view class="card-title">花在哪了</view>
+    <view class="kind" wx:for="{{kinds}}" wx:key="id">
+      <view class="kind-head">
+        <view class="dot" style="background: {{item.color}}"></view>
+        <view class="grow kind-lab">{{item.label}}</view>
+        <view class="kind-pct">{{item.pct}}%</view>
+        <view class="kind-dur">{{item.text}}</view>
+      </view>
+      <view class="kind-track">
+        <view class="kind-fill" style="width: {{item.pct}}%; background: {{item.color}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 明细 -->
+  <view class="card">
+    <view class="card-title">明细</view>
+    <scroll-view class="filter-scroll" scroll-x="true" enable-flex="true">
+      <view class="chips">
+        <view
+          class="chip {{filter === item.id ? 'on' : ''}}"
+          wx:for="{{filters}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="pickFilter"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="empty" wx:if="{{groups.length === 0}}">
+      <view class="hint">这个筛选下没有记录。</view>
+    </view>
+
+    <view wx:else>
+      <view class="day" wx:for="{{groups}}" wx:key="date" wx:for-item="g">
+        <view class="day-head">
+          <view class="grow day-date">{{g.dateCN}}</view>
+          <view class="day-sum">{{g.count}} 条 · {{g.totalText}}</view>
+        </view>
+        <view class="rec" wx:for="{{g.items}}" wx:key="id">
+          <view class="dot" style="background: {{item.kindColor}}"></view>
+          <view class="grow">
+            <view class="rec-title">{{item.title}}</view>
+            <view class="rec-sub">{{item.kindLabel}} · {{item.timeText}}</view>
+          </view>
+          <view class="rec-dur">{{item.durText}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

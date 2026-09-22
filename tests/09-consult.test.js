@@ -339,12 +339,20 @@ test('D6：四组维度（客户 / 项目 / 本周 / 本月）数值都正确', 
   const p1 = cs.addProject({ clientId: c1.id, name: '甲项目' });
   const p2 = cs.addProject({ clientId: c2.id, name: '乙项目' });
 
-  const t = util.today();
+  /* 固定参照日（周日 2026-09-20），本周 = 09-14 ~ 09-20。
+     这里刻意不用 util.today()：原先假设「wkStart - 20 天必落在上月」，
+     当月边界不同就会不成立（例如 9/21 是周一，减 20 天回到 9/1，仍在同一月），
+     导致月初/月末跑测试随机失败。改成固定日期后与运行时间完全解耦。 */
+  const t = '2026-09-20';
   const wkStart = util.startOfWeek(t, 1);
-  /* 本周内：p1 120 分钟；本周外（上月）：p2 60 分钟 */
+  /* 本周内：p1 120 分钟；上月且在本周之外：p2 60 分钟 */
   cs.addWorklog({ projectId: p1.id, minutes: 120, date: util.addDays(wkStart, 1) });
   const lastMonth = util.addDays(wkStart, -20);
   cs.addWorklog({ projectId: p2.id, minutes: 60, date: lastMonth });
+
+  /* 前置条件断言：固定日期下这条必须真的落在上月，否则后面的口径断言就没有意义 */
+  assert.strictEqual(util.monthKey(t), '2026-09');
+  assert.strictEqual(util.monthKey(lastMonth), '2026-08', 'p2 必须在上月');
 
   const byClient = cs.summaryItems('client');
   assert.deepStrictEqual(plain(byClient.map(i => i.label)), ['甲方', '乙方']);
@@ -358,13 +366,8 @@ test('D6：四组维度（客户 / 项目 / 本周 / 本月）数值都正确', 
   assert.deepStrictEqual(plain(wk.map(i => i.value)), [120]);
 
   const mo = cs.summaryItems('month', t);
-  /* 本周那条是否落进本月，取决于当月边界，按实际情况断言 */
-  if (util.monthKey(util.addDays(wkStart, 1)) === util.monthKey(t)) {
-    assert.deepStrictEqual(plain(mo.map(i => i.label)), ['甲项目']);
-    assert.deepStrictEqual(plain(mo.map(i => i.value)), [120]);
-  } else {
-    assert.strictEqual(mo.length, 0, '本月内没有工时应为空');
-  }
+  assert.deepStrictEqual(plain(mo.map(i => i.label)), ['甲项目'], '上月那条不计入本月');
+  assert.deepStrictEqual(plain(mo.map(i => i.value)), [120]);
 });
 
 test('D6：条形图宽度与数值比例一致', async () => {

@@ -1,0 +1,200 @@
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 4rpx 26rpx;
+}
+
+.wk-btn {
+  font-size: 25rpx;
+  color: var(--brand);
+  padding: 10rpx 0;
+}
+
+.wk-btn.off {
+  color: var(--text-3);
+  opacity: 0.5;
+}
+
+.wk-range {
+  font-size: 25rpx;
+  color: var(--text-2);
+}
+
+.hero-card {
+  background: var(--brand-soft);
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 22rpx;
+  color: var(--brand);
+  border: 1rpx solid var(--brand);
+  border-radius: 20rpx;
+  padding: 2rpx 16rpx;
+  margin-bottom: 18rpx;
+  opacity: 0.8;
+}
+
+.hero-text {
+  font-size: 34rpx;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.hero-sug {
+  margin-top: 26rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid rgba(31, 111, 235, 0.18);
+}
+
+.sug-lab {
+  font-size: 23rpx;
+  color: var(--brand);
+  margin-bottom: 8rpx;
+}
+
+.sug-text {
+  font-size: 27rpx;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.sum-row {
+  display: flex;
+}
+
+.sum-cell {
+  flex: 1;
+  min-width: 0;
+}
+
+.sum-num {
+  font-size: 36rpx;
+  font-weight: 600;
+  letter-spacing: -0.5rpx;
+}
+
+.sum-lab {
+  font-size: 22rpx;
+  color: var(--text-3);
+  margin-top: 4rpx;
+}
+
+.kind {
+  margin-bottom: 26rpx;
+}
+
+.kind:last-child {
+  margin-bottom: 0;
+}
+
+.kind-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  margin-right: 18rpx;
+  flex: none;
+}
+
+.kind-lab {
+  font-size: 27rpx;
+}
+
+.kind-pct {
+  font-size: 25rpx;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+  margin-left: 12rpx;
+}
+
+.kind-dur {
+  font-size: 25rpx;
+  color: var(--text-3);
+  width: 130rpx;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.kind-track {
+  height: 12rpx;
+  border-radius: 6rpx;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.kind-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  min-width: 6rpx;
+}
+
+.line {
+  display: flex;
+  align-items: flex-start;
+  font-size: 27rpx;
+  line-height: 1.65;
+  color: var(--text-2);
+  padding: 10rpx 0;
+}
+
+.line-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: var(--text-3);
+  margin: 18rpx 16rpx 0 0;
+  flex: none;
+}
+
+.cmp-row {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.cmp-delta {
+  font-size: 30rpx;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 涨跌沿用国内习惯：增为红、减为绿 */
+.cmp-delta.up {
+  color: #dc2626;
+}
+
+.cmp-delta.down {
+  color: #16a34a;
+}
+
+.acts {
+  margin-top: 8rpx;
+}
+
+.acts .btn {
+  width: 100%;
+}
+
+.foot-hint {
+  padding: 30rpx 8rpx 0;
+  text-align: center;
+}
+
+.mini-btn {
+  display: inline-block;
+  margin-top: 24rpx;
+  padding: 0 36rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 34rpx;
+  background: var(--brand);
+  color: #ffffff;
+  font-size: 27rpx;
+}
