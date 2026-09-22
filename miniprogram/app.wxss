@@ -58,9 +58,12 @@ page {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-/* 自定义 tabBar 固定在底部，页面底部留出安全距离 */
+/* 自定义 tabBar 固定在底部，页面必须自己留出等高的底部内边距。
+   只写死 180rpx 在带 Home Indicator 的机型上会差一点（tabBar 本身是
+   110rpx + 安全区，安全区通常约 68rpx，加起来 178rpx），最后一屏内容会被压住。
+   所以改成「tabBar 高度 + 安全区 + 留白」，各机型都够。 */
 .page-wrap {
-  padding: var(--sp) var(--sp) 180rpx;
+  padding: var(--sp) var(--sp) calc(150rpx + env(safe-area-inset-bottom));
 }
 
 .card {

@@ -434,14 +434,39 @@ test('外观：白天时段可改，跟随时间时按区间判定', async () =>
   input(ctx, endEl);
   assert.strictEqual(s(ctx).get().dayEnd, '21:00');
 
-  /* 跟随时间：现在落在区间内 → 白天 */
-  s(ctx).setTheme('auto');
-  assert.strictEqual(ctx.App.currentThemeName(), 'light');
-  /* 把区间挪到今天之外 → 晚上 */
-  s(ctx).setDayRange('00:00', '00:01');
-  const nm = ctx.App.util.hhmm();
-  const expect = (nm >= '00:00' && nm < '00:01') ? 'light' : 'dark';
-  assert.strictEqual(ctx.App.currentThemeName(), expect);
+  /* 跟随时间：用可控时钟判定，结果不能随运行时刻变化。
+     原来写死 dayEnd='21:00' 再假设「现在落在区间内」，
+     21:00 之后跑这条断言就会红（实测 21:42 变红）—— 属于时段依赖缺陷。
+     改成注入时钟后，顺带把区间边界规则测严：起点闭合、终点开区间。 */
+  const util = ctx.App.util;
+  const realHhmm = util.hhmm;
+  let fakeNow = '10:00';
+  util.hhmm = function () { return fakeNow; };
+
+  try {
+    s(ctx).setTheme('auto');
+    s(ctx).setDayRange('08:00', '18:00');
+
+    fakeNow = '07:59';
+    assert.strictEqual(ctx.App.currentThemeName(), 'dark', '早于起点应为晚上');
+    fakeNow = '08:00';
+    assert.strictEqual(ctx.App.currentThemeName(), 'light', '起点应闭合（含 08:00）');
+    fakeNow = '17:59';
+    assert.strictEqual(ctx.App.currentThemeName(), 'light', '区间内应为白天');
+    fakeNow = '18:00';
+    assert.strictEqual(ctx.App.currentThemeName(), 'dark', '终点应为开区间（不含 18:00）');
+    fakeNow = '23:30';
+    assert.strictEqual(ctx.App.currentThemeName(), 'dark', '深夜应为晚上');
+
+    /* 手动指定主题时不看时间 */
+    fakeNow = '10:00';
+    s(ctx).setTheme('dark');
+    assert.strictEqual(ctx.App.currentThemeName(), 'dark');
+    s(ctx).setTheme('light');
+    assert.strictEqual(ctx.App.currentThemeName(), 'light');
+  } finally {
+    util.hhmm = realHhmm;
+  }
 });
 
 test('偏好：一周第一天、默认首页都能改并即时落库', async () => {

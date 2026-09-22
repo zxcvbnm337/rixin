@@ -58,6 +58,7 @@ Page({
     var today = util.today();
     var recs = store.listByDate(today);
     var total = store.minutesOn(today);
+    var recsToday = recs.length > 0;
 
     /* 断档两天以上、且本来就有记录习惯，才提醒一次；新用户不打扰 */
     var brk = review.breakInfo(store.all(), today);

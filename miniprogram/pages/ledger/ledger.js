@@ -47,11 +47,13 @@ Page({
   },
 
   pickRange(e) {
-    this.setData({ days: Number(e.currentTarget.dataset.days) }, this.refresh);
+    this.setData({ days: Number(e.currentTarget.dataset.days) });
+    this.refresh();
   },
 
   pickFilter(e) {
-    this.setData({ filter: e.currentTarget.dataset.id }, this.refreshList);
+    this.setData({ filter: e.currentTarget.dataset.id });
+    this.refreshList();
   },
 
   /* 全量重算：范围、柱状图、分类分布、清单 */
@@ -73,7 +75,9 @@ Page({
         date: d.date,
         label: pub ? util.weekdayName(d.date).replace('周', '') : String(util.parseDate(d.date).getDate()),
         minutes: d.minutes,
-        text: util.fmtDuration(d.minutes),
+        /* 没投入的天不显示「0m」：7 天里 6 个 0m 只会制造噪音。
+           高度仍保留占位，保证柱子基线对齐。 */
+        text: d.minutes > 0 ? util.fmtDuration(d.minutes) : '',
         h: max > 0 ? Math.max(4, Math.round((d.minutes / max) * BAR_MAX_H)) : 4,
         today: d.date === to
       };

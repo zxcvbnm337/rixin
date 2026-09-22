@@ -3,7 +3,7 @@
   "compileType": "miniprogram",
   "miniprogramRoot": "./",
   "projectname": "time-ledger",
-  "appid": "touristappid",
+  "appid": "wx07a85c9c12ecf806",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -22,8 +22,24 @@
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,
-    "babelSetting": { "ignore": [], "disablePlugins": [], "outputPath": "" }
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false
   },
-  "packOptions": { "ignore": [], "include": [] },
-  "condition": {}
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {}
 }

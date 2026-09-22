@@ -65,12 +65,15 @@
   font-weight: 500;
 }
 
-/* 自绘开关：小程序没有原生 switch 的配色控制，自绘更统一 */
+/* 自绘开关：小程序没有原生 switch 的配色控制，自绘更统一。
+   关闭态必须描边 + 用白底滑块，否则在白卡片上几乎看不见。 */
 .switch {
   width: 92rpx;
   height: 52rpx;
   border-radius: 26rpx;
   background: var(--surface-2);
+  border: 1rpx solid var(--line);
+  box-sizing: border-box;
   flex: none;
   position: relative;
   transition: background 0.18s;
@@ -78,22 +81,23 @@
 
 .switch.on {
   background: var(--brand);
+  border-color: var(--brand);
 }
 
 .knob {
   position: absolute;
-  top: 4rpx;
-  left: 4rpx;
-  width: 44rpx;
-  height: 44rpx;
+  top: 3rpx;
+  left: 3rpx;
+  width: 42rpx;
+  height: 42rpx;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.18);
   transition: transform 0.18s;
 }
 
 .switch.on .knob {
-  transform: translateX(40rpx);
+  transform: translateX(38rpx);
 }
 
 .act-row {

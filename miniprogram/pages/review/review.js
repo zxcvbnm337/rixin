@@ -32,7 +32,8 @@ Page({
     var delta = Number(e.currentTarget.dataset.delta);
     var next = this.data.weekOffset + delta;
     if (next > 0) return;
-    this.setData({ weekOffset: next }, this.build);
+    this.setData({ weekOffset: next });
+    this.build();
   },
 
   build() {

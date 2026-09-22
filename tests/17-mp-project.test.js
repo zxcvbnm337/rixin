@@ -242,7 +242,25 @@ test('mp 工程：结构型 token 与主题色 token 分层声明', () => {
   });
 });
 
-test('mp 工程：页面样式只引用已声明的变量', () => {
+test('mp 工程：页面容器为固定的自定义 tabBar 预留了高度与安全区', () => {
+  const css = read(path.join(MP, 'app.wxss'));
+  const m = /\.page-wrap\s*\{[\s\S]*?\}/.exec(css);
+  assert.ok(m, 'app.wxss 应定义 .page-wrap');
+
+  const rule = m[0];
+  assert.ok(/padding\s*:/.test(rule), '.page-wrap 应设置 padding');
+
+  /* 自定义 tabBar 是 position:fixed，页面必须自己留出底部空间，
+     否则最后一屏内容会被压住（本机实测在带 Home Indicator 的机型上差一点）。 */
+  assert.ok(/env\(\s*safe-area-inset-bottom\s*\)/.test(rule),
+    '.page-wrap 的底部内边距必须叠加 env(safe-area-inset-bottom)，否则刘海机型会被 tabBar 压住');
+
+  const bottom = /padding[^;]*?([\d.]+)rpx[^;]*;/.exec(rule);
+  assert.ok(bottom && Number(bottom[1]) >= 110,
+    '底部留白应不小于自定义 tabBar 的 110rpx，实际：' + (bottom && bottom[1] + 'rpx'));
+});
+
+test('mp 工程：页面样式只引用已声明的变量（跨文件不共享变量）', () => {
   const css = read(path.join(MP, 'app.wxss'));
   const declared = new Set(varsIn(css));
 
